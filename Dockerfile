@@ -4,7 +4,6 @@ RUN apt-get update \
     && apt-get install -y \
        git
 
-ENV RESTY_REDIS_CLUSTER_COMMIT_SHA 92da33ae76323db6a888cace231ad291c6296c0a
 RUN mkdir /src \
     && cd /src \
     && git config --global url."https://".insteadOf git:// \
