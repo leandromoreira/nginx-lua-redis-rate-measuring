@@ -6,7 +6,7 @@ services:
       context: .
     volumes:
       - "./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf"
-      - "./code.lua:/lua/code.lua"
+      - "./src/:/lua/src/"
     depends_on:
       - redis_cluster
     links:
