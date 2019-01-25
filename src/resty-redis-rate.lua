@@ -1,6 +1,6 @@
-local throttling = {}
+local redis_rate = {}
 
-throttling.rate_for = function(redis_client, key)
+redis_rate.measure = function(redis_client, key)
   local current_time = math.floor(ngx.now())
   local current_minute = math.floor(current_time / 60) % 60
   local past_minute = current_minute - 1
@@ -35,4 +35,4 @@ throttling.rate_for = function(redis_client, key)
   return current_rate, nil
 end
 
-return throttling
+return redis_rate
