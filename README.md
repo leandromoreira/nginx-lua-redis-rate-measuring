@@ -1,6 +1,6 @@
 # Nginx Lua Redis Rate Measuring
 
-A [Lua](https://www.lua.org/) library to provide rate measurement using [nginx](https://nginx.org/) + redis. This lib was inspired at a Cloudflare's post: [How we built rate limiting capable of scaling to millions of domains](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
+A [Lua](https://www.lua.org/) library to provide rate measurement using [nginx](https://nginx.org/) + Redis. This lib was inspired at a Cloudflare's post: [How we built rate limiting capable of scaling to millions of domains](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/).
 
 # Use case: distributed throttling
 
@@ -21,9 +21,19 @@ end
 ngx.say(rate)
 ```
 
-# Use case: tests
+### Tests result
 
-You can run the throttling example locally and also test it. Open up a terminal tab to run the servers.
+We ran three different experiments constrained by a `rate limit of 10 req/s`:
+
+1.  `Experiment1:` 1 reqs/second
+1.  `Experiment2:` 1/6 reqs/second
+1.  `Experiment3:` 1/5 reqs/second
+
+![nginx redis throttling exprimentes graph result](/img/graph.png "A graph with experiments results")
+
+> All the data points above the rate limit (the red line) resulted in forbidden responses.
+
+You can run the throttling example locally, open up a terminal tab to run the servers.
 
 ```bash
 make up
@@ -31,15 +41,12 @@ make up
 Open another terminal tab and perform some tests
 
 ```bash
-# it allows 10 req/s instantaneously
-for i in {1..10}; do curl "http://localhost:8080/lua_content?token=secretvalue"; done
+# Experiment 1
+for i in {1..120}; do curl "http://localhost:8080/lua_content?token=Experiment1" && sleep 1; done
 
-# it allows 10 req/s in a normal distribution
-for i in {1..20}; do sleep 6 && curl "http://localhost:8080/lua_content?token=secretvalue1"; done
+# Experiment 2
+for i in {1..20}; do curl "http://localhost:8080/lua_content?token=Experiment2" && sleep 6; done
 
-# it forbids 12 req/s instantaneously (after the 10th)
-for i in {1..12}; do curl "http://localhost:8080/lua_content?token=secretvalue2"; done
-
-# it forbids 12 req/s in a normal distribution (60/12 = 5s)
-for i in {1..50}; do sleep 5 && curl "http://localhost:8080/lua_content?token=secretvalue3"; done
+# Experiment 3
+for i in {1..24}; do curl "http://localhost:8080/lua_content?token=Experiment3" && sleep 5; done
 ```
