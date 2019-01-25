@@ -1,7 +1,7 @@
 build:
 	docker-compose build
 
-up:
+up: down
 	docker-compose up
 
 down:
