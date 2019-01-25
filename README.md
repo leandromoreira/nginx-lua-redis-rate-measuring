@@ -23,7 +23,7 @@ ngx.say(rate)
 
 ### Tests result
 
-We ran three different experiments constrained by a `rate limit of 10 req/s`:
+We ran three different experiments constrained by a `rate limit of 10 req/minute`:
 
 1.  `Experiment1:` 1 reqs/second
 1.  `Experiment2:` 1/6 reqs/second
