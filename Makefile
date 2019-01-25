@@ -1,8 +1,8 @@
 build:
-	docker-compose build
+	docker-compose build nginx
 
 up: down
-	docker-compose up
+	docker-compose up nginx
 
 down:
 	docker-compose down -v
