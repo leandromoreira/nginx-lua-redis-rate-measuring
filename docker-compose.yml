@@ -17,6 +17,14 @@ services:
     ports:
       - "8080:8080"
 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ".:/lua/"
+    working_dir: "/lua"
+
   redis_cluster:
     image: grokzen/redis-cluster:latest
     ports:

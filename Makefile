@@ -7,4 +7,10 @@ up: down
 down:
 	docker-compose down -v
 
-.PHONY: build up down
+build-test:
+	docker-compose build test
+
+test:
+	docker-compose run --rm test
+
+.PHONY: build up down build-test test
