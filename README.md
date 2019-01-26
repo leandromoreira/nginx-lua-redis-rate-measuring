@@ -2,6 +2,8 @@
 
 A [Lua](https://www.lua.org/) library to provide rate measurement using [nginx](https://nginx.org/) + Redis. This lib was inspired on Cloudflare's post [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
 
+> You can found more about why and when this library was created [here.](https://leandromoreira.com.br/2019/01/25/how-to-build-a-distributed-throttling-system-with-nginx-lua-redis/).
+
 # Use case: distributed throttling
 
 Nginx has already [a rate limiting feature](https://www.nginx.com/blog/rate-limiting-nginx/) but it is restricted by the local node. Once you have more than one server behind a load balancer this won't work as expected, so you can use [redis](https://redis.io/) as a distributed storage to keep the rating data.
