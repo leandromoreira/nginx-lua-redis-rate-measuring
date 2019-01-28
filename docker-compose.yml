@@ -11,9 +11,6 @@ services:
       - redis_cluster
     links:
       - redis_cluster
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.2
     ports:
       - "8080:8080"
 
@@ -29,14 +26,3 @@ services:
     image: grokzen/redis-cluster:latest
     ports:
       - '7000-7005:7000-7005'
-    networks:
-      vpcbr:
-        ipv4_address: 10.5.0.3
-
-networks:
-  vpcbr:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 10.5.0.0/16
-          gateway: 10.5.0.1
