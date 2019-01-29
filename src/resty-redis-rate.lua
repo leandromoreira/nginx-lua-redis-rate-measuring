@@ -9,31 +9,26 @@ redis_rate.measure = function(redis_client, key)
   local current_key = key_prefix .. "_" .. key .. "_" .. current_minute
   local past_key = key_prefix .. "_" .. key .. "_" .. past_minute
 
-  local resp, err = redis_client:get(past_key)
+  redis_client:init_pipeline()
+
+  redis_client:get(past_key)
+  redis_client:incr(current_key)
+  redis_client:expire(current_key, 2 * 60)
+
+  local resp, err = redis_client:commit_pipeline()
   if err then
     return nil, err
   end
 
-  if resp == ngx.null then
-    resp = "0"
+  local first_resp = resp[1]
+  if first_resp == ngx.null then
+    first_resp  = "0"
   end
-
-  local last_counter = tonumber(resp)
-
-  resp, err = redis_client:incr(current_key)
-  if err then
-    return nil, err
-  end
-
-  local current_counter = tonumber(resp) - 1
-
-  resp, err = redis_client:expire(current_key, 2 * 60)
-  if err then
-    return nil, err
-  end
+  local past_counter = tonumber(first_resp)
+  local current_counter = tonumber(resp[2]) - 1
 
   -- strongly inspired by https://blog.cloudflare.com/counting-things-a-lot-of-different-things/
-  local current_rate = last_counter * ((60 - (current_time % 60)) / 60) + current_counter
+  local current_rate = past_counter * ((60 - (current_time % 60)) / 60) + current_counter
   return current_rate, nil
 end
 
