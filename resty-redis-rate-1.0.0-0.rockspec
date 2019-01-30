@@ -5,7 +5,7 @@ source = {
   tag = "1.0.0"
 }
 description = {
-  summary = "A resty Lua library to provide distributed rate measurement using nginx + redis",
+  summary = "A resty Lua library to provide distributed rate measurement using Redis",
   homepage = "https://github.com/leandromoreira/nginx-lua-redis-rate-measuring",
   license = "BSD 3-Clause"
 }
