@@ -5,7 +5,7 @@ local key_prefix = "ngx_rate_measuring"
 redis_rate.measure = function(redis_client, key)
   local current_time = math.floor(ngx.now())
   local current_minute = math.floor(current_time / 60) % 60
-  local past_minute = current_minute - 1
+  local past_minute = (current_minute + 59) % 60
   local current_key = key_prefix .. "_{" .. key .. "}_" .. current_minute
   local past_key = key_prefix .. "_{" .. key .. "}_" .. past_minute
 
