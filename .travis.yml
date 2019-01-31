@@ -1,0 +1,15 @@
+language: lua
+
+services:
+  - docker
+dist: trusty
+
+env:
+  COMPOSE_VERSION: 18.06
+
+install: docker-compose build test
+
+script:
+  - docker-compose run --rm test
+
+after_script: docker-compose down
