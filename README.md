@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring.svg?branch=master)](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring) [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
+
 # Resty Redis Rate
 
 A [Lua](https://www.lua.org/) library to provide rate measurement using [nginx](https://nginx.org/) + Redis. This lib was inspired on Cloudflare's post [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
