@@ -36,6 +36,13 @@ describe("Resty Redis Rate", function()
       local rate = redis_rate.measure(fake_redis, "key")
 
       assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_50", 2 * 60 - 48)
+
+      -- now we're simulating a second call after 10 seconds
+      ngx_now = 1548939058
+
+      rate = redis_rate.measure(fake_redis, "key")
+
+      assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_50", 2 * 60 - 58)
     end)
 
     it("works for the first second", function()
