@@ -22,7 +22,7 @@ before_each(function()
     stub(fake_redis, "get")
     stub(fake_redis, "incr")
     stub(fake_redis, "expire")
-    fake_redis.commit_pipeline = function(self)
+    fake_redis.commit_pipeline = function(_)
       return {get_resp, incr_resp, expire_resp}
     end
     ngx_now = FIXED_NOW
@@ -33,14 +33,14 @@ describe("Resty Redis Rate", function()
     it("decreases ttl based on time has passed", function()
       -- ngx.now() is Thu Jan 31 10:50:48 -02 2019 (1548939048)
       -- current second being 48 so we just subtract 48 seconds from 2 minutes
-      local rate = redis_rate.measure(fake_redis, "key")
+      local _ = redis_rate.measure(fake_redis, "key")
 
       assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_50", 2 * 60 - 48)
 
       -- now we're simulating a second call after 10 seconds
       ngx_now = 1548939058
 
-      rate = redis_rate.measure(fake_redis, "key")
+      _ = redis_rate.measure(fake_redis, "key")
 
       assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_50", 2 * 60 - 58)
     end)
@@ -49,7 +49,7 @@ describe("Resty Redis Rate", function()
       -- $ date -r 1548939600
       -- Thu Jan 31 11:00:00 -02 2019
       ngx_now = 1548939600
-      local rate = redis_rate.measure(fake_redis, "key")
+      local _ = redis_rate.measure(fake_redis, "key")
 
       assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_0", 2 * 60)
     end)
@@ -58,7 +58,7 @@ describe("Resty Redis Rate", function()
       -- $ date -r 1548939659
       -- Thu Jan 31 11:00:59 -02 2019
       ngx_now = 1548939659
-      local rate = redis_rate.measure(fake_redis, "key")
+      local _ = redis_rate.measure(fake_redis, "key")
 
       assert.stub(fake_redis.expire).was_called_with(fake_redis, key_prefix .. "_{key}_0", 2 * 60 - 59)
     end)
@@ -69,7 +69,7 @@ describe("Resty Redis Rate", function()
     -- Thu Jan 31 11:00:00 -02 2019
     ngx_now = 1548939600
 
-    local rate = redis_rate.measure(fake_redis, "key")
+    local _ = redis_rate.measure(fake_redis, "key")
 
     assert.stub(fake_redis.get).was_called_with(fake_redis, key_prefix .. "_{key}_59")
   end)

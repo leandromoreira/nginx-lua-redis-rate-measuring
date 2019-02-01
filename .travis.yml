@@ -10,6 +10,7 @@ env:
 install: docker-compose build test
 
 script:
+  - docker-compose run --rm lint
   - docker-compose run --rm test
 
 after_script: docker-compose down

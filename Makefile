@@ -13,4 +13,7 @@ build-test:
 test:
 	docker-compose run --rm test
 
+lint:
+	docker-compose run --rm lint
+
 .PHONY: build up down build-test test
