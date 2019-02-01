@@ -23,12 +23,23 @@ before_each(function()
     stub(fake_redis, "incr")
     stub(fake_redis, "expire")
     fake_redis.commit_pipeline = function(_)
-      return {get_resp, incr_resp, expire_resp}
+      return {get_resp, incr_resp, expire_resp}, nil
     end
     ngx_now = FIXED_NOW
 end)
 
 describe("Resty Redis Rate", function()
+  it("returns an error when redis unavailable", function()
+    fake_redis.commit_pipeline = function(_)
+      return nil, "error"
+    end
+
+    local resp, err = redis_rate.measure(fake_redis, "key")
+
+    assert.is_nil(resp)
+    assert.is_not_nil(err)
+  end)
+
   describe("Expiration time", function()
     it("decreases ttl based on time has passed", function()
       -- ngx.now() is Thu Jan 31 10:50:48 -02 2019 (1548939048)
