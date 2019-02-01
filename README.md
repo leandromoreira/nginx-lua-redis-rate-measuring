@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring.svg?branch=master)](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring) [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
+[![Build Status](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring.svg?branch=master)](https://travis-ci.org/leandromoreira/nginx-lua-redis-rate-measuring) [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg) [![Coverage Status](https://coveralls.io/repos/github/leandromoreira/nginx-lua-redis-rate-measuring/badge.svg?branch=add-coverage)](https://coveralls.io/github/leandromoreira/nginx-lua-redis-rate-measuring?branch=add-coverage)
 
 # Resty Redis Rate
 
