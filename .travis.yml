@@ -13,4 +13,6 @@ script:
   - docker-compose run --rm lint
   - docker-compose run --rm test
 
+after_success: docker-compose run --rm coverage
+
 after_script: docker-compose down

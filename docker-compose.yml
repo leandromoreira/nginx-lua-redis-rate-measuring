@@ -15,7 +15,30 @@ services:
       - "8080:8080"
 
   test:
-    command: busted -v
+    command: busted -c
+    environment:
+      - TRAVIS=true
+      - CI=true
+      - COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}
+      - TRAVIS_JOB_ID=${TRAVIS_JOB_ID}
+      - TRAVIS_BRANCH=${TRAVIS_BRANCH}
+      - TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ".:/lua/"
+    working_dir: "/lua"
+
+  coverage:
+    command: luacov-coveralls -v
+    environment:
+      - TRAVIS=true
+      - CI=true
+      - COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}
+      - TRAVIS_JOB_ID=${TRAVIS_JOB_ID}
+      - TRAVIS_BRANCH=${TRAVIS_BRANCH}
+      - TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}
     build:
       context: .
       dockerfile: Dockerfile.test
@@ -25,6 +48,13 @@ services:
 
   lint:
     command: bash -c "luacheck -q ."
+    environment:
+      - TRAVIS=true
+      - CI=true
+      - COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}
+      - TRAVIS_JOB_ID=${TRAVIS_JOB_ID}
+      - TRAVIS_BRANCH=${TRAVIS_BRANCH}
+      - TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}
     build:
       context: .
       dockerfile: Dockerfile.test
