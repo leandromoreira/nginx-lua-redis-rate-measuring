@@ -5,7 +5,8 @@ local ngx_now = FIXED_NOW
 _G.ngx = {
   now=function()
     return ngx_now
-  end
+  end,
+  null="NULL"
 }
 
 local redis_rate = require "resty-redis-rate"
@@ -26,9 +27,22 @@ before_each(function()
       return {get_resp, incr_resp, expire_resp}, nil
     end
     ngx_now = FIXED_NOW
+    expire_resp = "OK"
+    get_resp = "0"
+    incr_resp = "1"
 end)
 
 describe("Resty Redis Rate", function()
+  it("returns rate when there is no past counter", function()
+    get_resp = ngx.null
+    incr_resp = "10" -- this is your 10th hit but your rate is 9
+
+    local resp, err = redis_rate.measure(fake_redis, "key")
+
+    assert.is_nil(err)
+    assert.same(9, resp)
+  end)
+
   it("returns an error when redis unavailable", function()
     fake_redis.commit_pipeline = function(_)
       return nil, "error"
