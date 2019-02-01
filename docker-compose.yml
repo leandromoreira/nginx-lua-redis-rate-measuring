@@ -24,7 +24,7 @@ services:
     working_dir: "/lua"
 
   coverage:
-    command: luacov-coveralls
+    command: luacov-coveralls -v
     build:
       context: .
       dockerfile: Dockerfile.test
