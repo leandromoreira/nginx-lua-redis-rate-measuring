@@ -33,6 +33,17 @@ before_each(function()
 end)
 
 describe("Resty Redis Rate", function()
+  it("returns the rate", function()
+    -- Thu Jan 31 10:50:48 -02 2019
+    get_resp = "10" -- last minute rate was 10 (1 each 6 seconds)
+    incr_resp = "5" -- current rate counter is 5
+
+    local resp, err = redis_rate.measure(fake_redis, "key")
+
+    assert.is_nil(err)
+    -- it takes partial contribution from the first counter (12/60)*10 plus current counter 4
+    assert.same(6, resp)
+  end)
 
   describe("When there is no past counter", function()
     it("returns rate for ongoing current counter", function()
