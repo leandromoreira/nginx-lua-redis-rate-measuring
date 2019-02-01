@@ -9,11 +9,9 @@ env:
 
 install: docker-compose build test
 
-before_script: luarocks install luacov-coveralls
-
 script:
   - docker-compose run --rm test
 
 after_success: docker-compose run --rm coverage
 
-after_script: luacov-coveralls -v
+after_script: docker-compose down
