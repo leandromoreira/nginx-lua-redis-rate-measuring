@@ -15,7 +15,16 @@ services:
       - "8080:8080"
 
   test:
-    command: busted -v
+    command: busted -c
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - ".:/lua/"
+    working_dir: "/lua"
+
+  coverage:
+    command: luacov-coveralls
     build:
       context: .
       dockerfile: Dockerfile.test
