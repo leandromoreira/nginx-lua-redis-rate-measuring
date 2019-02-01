@@ -33,14 +33,27 @@ before_each(function()
 end)
 
 describe("Resty Redis Rate", function()
-  it("returns rate when there is no past counter", function()
-    get_resp = ngx.null
-    incr_resp = "10" -- this is your 10th hit but your rate is 9
 
-    local resp, err = redis_rate.measure(fake_redis, "key")
+  describe("When there is no past counter", function()
+    it("returns rate for ongoing current counter", function()
+      get_resp = ngx.null
+      incr_resp = "10" -- this is your 10th hit but your rate is 9
 
-    assert.is_nil(err)
-    assert.same(9, resp)
+      local resp, err = redis_rate.measure(fake_redis, "key")
+
+      assert.is_nil(err)
+      assert.same(9, resp)
+    end)
+
+    it("returns rate for starting current counter", function()
+      get_resp = ngx.null
+      incr_resp = "1" -- this is your first hit but your rate is 0
+
+      local resp, err = redis_rate.measure(fake_redis, "key")
+
+      assert.is_nil(err)
+      assert.same(0, resp)
+    end)
   end)
 
   it("returns an error when redis unavailable", function()
