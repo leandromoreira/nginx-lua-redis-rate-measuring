@@ -1,11 +1,15 @@
 local redis_rate = {}
 
 local key_prefix = "ngx_rate_measuring"
+local math_floor = math.floor
+local ngx_now = ngx.now
+local ngx_null = ngx.null
+local tonumber = tonumber
 
 redis_rate.measure = function(redis_client, key)
-  local current_time = math.floor(ngx.now())
+  local current_time = math_floor(ngx_now())
   local current_second = current_time % 60
-  local current_minute = math.floor(current_time / 60) % 60
+  local current_minute = math_floor(current_time / 60) % 60
   local past_minute = (current_minute + 59) % 60
   local current_key = key_prefix .. "_{" .. key .. "}_" .. current_minute
   local past_key = key_prefix .. "_{" .. key .. "}_" .. past_minute
@@ -22,7 +26,7 @@ redis_rate.measure = function(redis_client, key)
   end
 
   local first_resp = resp[1]
-  if first_resp == ngx.null then
+  if first_resp == ngx_null then
     first_resp  = "0"
   end
   local past_counter = tonumber(first_resp)
