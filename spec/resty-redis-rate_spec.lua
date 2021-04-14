@@ -136,13 +136,19 @@ describe("Resty Redis Rate", function()
       resp, err = redis_rate.measure(fake_redis, "key")
     end
 
-    local now = function()
-      return os.clock()
+    local cpu_bench_out = function(result)
+      print("\nCPU: #measures runs at " .. result .. " seconds")
     end
 
-    perf.perf_time("rate#measure", fn_bench, nil, {N=1e3, now=function()return os.clock()end})
-    perf.perf_mem("rate#measure", fn_bench, nil, {N=1e3})
+    local mem_bench_out = function(result)
+      print("\nMEM: #measures uses " .. result .. " kb")
+    end
 
-    _G.ngx.now = original_now
+    perf.perf_time("rate#measure", fn_bench, cpu_bench_out, {N=1e3, now=function()return os.clock()end})
+    perf.perf_mem("rate#measure", fn_bench, mem_bench_out, {N=1e3})
+
+    assert.is_nil(err)
+    -- it takes partial contribution from the first counter (12/60)*10 plus current counter 4
+    assert.same(6, resp)
   end)
 end)
