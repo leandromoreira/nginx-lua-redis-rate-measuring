@@ -13,6 +13,7 @@ RUN apt-get update \
     && luarocks install luacov \
     && luarocks install luacov-coveralls \
     && luarocks install busted \
+    && luarocks install lua-resty-perf 1.0.4-0 \
     && git clone https://github.com/steve0511/resty-redis-cluster.git \
     && cd resty-redis-cluster/ \
     && git checkout 8d7b96d002337c38d71859e5f04f76b413aa5c29 \

@@ -10,6 +10,7 @@ _G.ngx = {
 }
 
 local redis_rate = require "resty-redis-rate"
+local perf = require "resty.perf"
 
 local key_prefix = "ngx_rate_measuring"
 local fake_redis
@@ -121,5 +122,27 @@ describe("Resty Redis Rate", function()
     local _ = redis_rate.measure(fake_redis, "key")
 
     assert.stub(fake_redis.get).was_called_with(fake_redis, key_prefix .. "_{key}_59")
+  end)
+end)
+
+describe("Resty Redis Rate", function()
+  it("runs memory and throughput profiling", function()
+    -- Thu Jan 31 10:50:48 -02 2019
+    get_resp = "10" -- last minute rate was 10 (1 each 6 seconds)
+    incr_resp = "5" -- current rate counter is 5
+
+    local resp, err = redis_rate.measure(fake_redis, "key")
+    local fn_bench = function()
+      resp, err = redis_rate.measure(fake_redis, "key")
+    end
+
+    local now = function()
+      return os.clock()
+    end
+
+    perf.perf_time("rate#measure", fn_bench, nil, {N=1e3, now=function()return os.clock()end})
+    perf.perf_mem("rate#measure", fn_bench, nil, {N=1e3})
+
+    _G.ngx.now = original_now
   end)
 end)
