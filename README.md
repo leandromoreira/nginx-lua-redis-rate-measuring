@@ -2,7 +2,7 @@
 
 # Resty Redis Rate
 
-A [Lua](https://www.lua.org/) library to provide rate measurement using [nginx](https://nginx.org/) + Redis. This lib was inspired on Cloudflare's post [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
+A [Lua](https://www.lua.org/) library providing rate measurement using [nginx](https://nginx.org/) + Redis. This lib was inspired on Cloudflare's post [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
 
 > You can found more about why and when this library was created [here.](https://leandromoreira.com.br/2019/01/25/how-to-build-a-distributed-throttling-system-with-nginx-lua-redis/).
 
